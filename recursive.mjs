@@ -111,4 +111,4 @@ const findFromBack = (list, n) => {
   return result;
 };
 
-console.log(findFromBack(list, 99));
+console.log(findFromBack(list, 5));
