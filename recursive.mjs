@@ -93,10 +93,10 @@ const findFromBackCounted = (list, n) => {
 };
 
 /**
- * Find the nth list item from the back or return undefined if it doesn't exist
+ * Find the nth list item from the back or return null if it doesn't exist
  * @param {List} list List to search in
  * @param {number} n Starting point to count from the back
- * @returns {List | undefined} The element at the nth position from the back
+ * @returns {List | null} The element at the nth position from the back
  */
 const findFromBack = (list, n) => {
   if (n < 0) {
@@ -105,7 +105,7 @@ const findFromBack = (list, n) => {
   const { result, index } = findFromBackCounted(list, n);
   // If the index is not n, then the list is shorter than n elements
   if (index !== n) {
-    return undefined;
+    return null;
   }
   return result;
 };
