@@ -4,6 +4,7 @@ const BENCHMARK_SIZE: usize = 1_000_000;
 
 struct RunningMedian {
     min_heap: BinaryHeap<i32>,
+    // Hey, isn't it cool that the reversed order is part of the type system?
     max_heap: BinaryHeap<Reverse<i32>>,
 }
 
@@ -16,10 +17,13 @@ impl RunningMedian {
     }
 
     fn add(&mut self, num: i32) {
+        // This solution always keeps the heaps balanced and does the work on insertion. This means that the find_median function is O(1)
         if self.min_heap.len() == self.max_heap.len() {
+            // Because of the two lines below, we always know that the max_heap is at least as big as the min_heap
             self.min_heap.push(num);
             self.max_heap.push(Reverse(self.min_heap.pop().unwrap()));
         } else {
+            // Because the max_heap is always bigger than the min_heap, we can do this to always get them to the same length
             self.max_heap.push(Reverse(num));
             self.min_heap.push(self.max_heap.pop().unwrap().0);
         }
@@ -27,10 +31,13 @@ impl RunningMedian {
 
     fn find_median(&self) -> f64 {
         if self.min_heap.len() == self.max_heap.len() {
-            (self.min_heap.peek().or(Some(&0)).unwrap()
-                + self.max_heap.peek().or(Some(&Reverse(0))).unwrap().0) as f64
+            // This is fancy Rust fpr saying "the average of the first element of the min_heap and the first element of the max_heap"
+            (self.min_heap.peek().unwrap_or(&0) + self.max_heap.peek().unwrap_or(&Reverse(0)).0)
+                as f64
                 / 2.0
         } else {
+            // We know that the max_heap is always bigger than the min_heap, so we can just take the first element
+            // Unwrapping here is safe, because the heap will always have at least one element
             self.max_heap.peek().unwrap().0.into()
         }
     }
@@ -41,6 +48,7 @@ fn main() {
     let mut medians: Vec<f64> = Vec::with_capacity(BENCHMARK_SIZE);
     let mut random_numbers: Vec<i32> = Vec::with_capacity(BENCHMARK_SIZE);
     for _ in 0..BENCHMARK_SIZE {
+        // Using i16 here, because i32 can run into overflows when calculating the median
         random_numbers.push(rand::random::<i16>().into());
     }
 
