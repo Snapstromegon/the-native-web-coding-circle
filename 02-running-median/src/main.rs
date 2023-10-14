@@ -11,8 +11,8 @@ struct RunningMedian {
 impl RunningMedian {
     fn new() -> Self {
         RunningMedian {
-            min_heap: BinaryHeap::with_capacity(BENCHMARK_SIZE),
-            max_heap: BinaryHeap::with_capacity(BENCHMARK_SIZE),
+            min_heap: BinaryHeap::new(),
+            max_heap: BinaryHeap::new(),
         }
     }
 
